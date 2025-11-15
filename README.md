@@ -24,7 +24,7 @@ The client supports adding, deleting, and displaying users, with live updates us
 ---
 
 ## **Project Structure**
-
+```
 QtUserManager/
 ├─ qt-client/ # Qt project
 │ ├─ main.cpp
@@ -39,7 +39,7 @@ QtUserManager/
 │ └─ users.db # (gitignore recommended, created by the server if not present)
 ├─ README.md
 └─ .gitignore
-
+```
 
 ---
 
