@@ -25,7 +25,7 @@ The client supports adding, deleting, and displaying users, with live updates us
 
 ## **Project Structure**
 ```
-QtUserManager/
+UserManagerQtNode/
 ├─ qt-client/ # Qt project
 │ ├─ main.cpp
 │ ├─ main.qml
