@@ -1,7 +1,7 @@
 # Qt
 *.pro.user
 *.txt.user
-build-*/
+*build*
 *.o
 *.obj
 *.exe

@@ -66,29 +66,6 @@ void DbUserModel::addUser(QString name, int age, int tableId, bool insertRows)
     }
 }
 
-void DbUserModel::deleteUser(QString name, int age)
-{
-    auto it = find_if(mUserList.begin(), mUserList.end(), [=](DbUser* el){
-        return el->age() == age && el->name() == name;
-    });
-
-    if (it != mUserList.end())
-    {
-        int index = it - mUserList.begin();
-        deleteUserByIndex(index);
-    }
-}
-
-void DbUserModel::deleteUserByIndex(int index)
-{
-    beginRemoveRows(QModelIndex(), index, index);
-
-    auto iterator= mUserList.begin()+index;
-    mUserList.erase(iterator);
-
-    endRemoveRows();
-}
-
 void DbUserModel::createList(const QByteArray &jsonData)
 {
     QJsonDocument doc = QJsonDocument::fromJson(jsonData);
@@ -130,7 +107,7 @@ int DbUserModel::rowCount(const QModelIndex &parent) const
 
 QVariant DbUserModel::data(const QModelIndex &index, int role) const
 {
-    if (index.row() < 0 || index.row() > mUserList.size())
+    if (index.row() < 0 || index.row() >= mUserList.size())
         return QVariant();
 
     if(role <= Qt::UserRole && role > ageRole)
@@ -153,7 +130,7 @@ QVariant DbUserModel::data(const QModelIndex &index, int role) const
 
 bool DbUserModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (index.row() < 0 || index.row() > mUserList.size())
+    if (index.row() < 0 || index.row() >= mUserList.size())
         return false;
 
     if(role <= Qt::UserRole && role > ageRole)
@@ -233,14 +210,14 @@ void DbUserModel::sendUserToServer(const QString &name, int age)
 
 void DbUserModel::deleteUserFromServer(int id)
 {
-    // DELETE non deve avere un body → molti server rifiutano DELETE + body ---> ID va messo nell’URL
+    // DELETE should have no body --> many servers do not accept DELETE + body ---> ID to be put inside URL
 
-    // Costruisco l’URL con l'ID
+    // Use ID to create URL
     QUrl url(QString("%1/%2").arg(SERVER_URL).arg(id));
 
     QNetworkRequest request(url);
 
-    // DELETE non necessita di body!
+    // DELETE needs no body!
     QNetworkReply *reply = mpManager->sendCustomRequest(
         request,
         "DELETE"
@@ -251,7 +228,7 @@ void DbUserModel::deleteUserFromServer(int id)
         {
             qDebug() << "User deleted.";
 
-            // chiedi la lista aggiornata
+            // update list
             getUsers();
         }
         else

@@ -29,11 +29,6 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     QHash<int, QByteArray> roleNames() const;
 
-    Q_INVOKABLE void addUser(QString name, int age, int tableId, bool insertRows = false);
-    Q_INVOKABLE void deleteUser(QString name, int age);
-    Q_INVOKABLE void deleteUserByIndex(int index);
-
-    void createList(const QByteArray &jsonData);
 
     Q_INVOKABLE void sendUserToServer(const QString &name, int age);
     Q_INVOKABLE void deleteUserFromServer(int id);
@@ -48,8 +43,10 @@ private:
 
     void getUsers();
 
-    //QWebSocket *mpWebSocket = nullptr;
-
+    void createList(const QByteArray &jsonData);
+	
+	void addUser(QString name, int age, int tableId, bool insertRows = false);
+	
     WebSocketClient *mpSocketClient = nullptr;
 
 };
